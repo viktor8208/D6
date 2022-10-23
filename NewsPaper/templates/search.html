@@ -1,0 +1,62 @@
+{% extends 'flatpages/default.html' %} 
+ 
+{% load custom_filters %}
+
+{% block title %}
+search
+{% endblock title %}
+ 
+
+{% block content %}
+ <p></p>
+ <p></p>
+ <p></p>
+ <p> Введите параметры поиска</p>
+<p></p>
+ <p></p>
+ <p></p>
+
+     <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
+
+{% if request.GET%}
+  {% if news%}
+    <p> По вашему запросу yа нашем сайте имеются следующие новости: </p>
+
+    {%for newss in news%}
+        <hr>
+        <p align="left"> Title: {{newss.heading|filter_mata}}</p>
+        <p align="left">Date: {{newss.date_time|date:'d M Y' }}</p>
+        <p align="left"> {{newss.text|truncatewords:20|filter_mata}}</p>
+    {% endfor %}
+ {% else %}
+
+<h2> По вашему запросу новостей нет!</h2>
+ {% endif %}
+
+
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+
+   {{ page_obj.number }}
+
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endif %}
+{% endblock content %}

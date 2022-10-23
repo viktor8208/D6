@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %} 
+ 
+{% load custom_filters %}
+
+{% block title %}
+news
+{% endblock title %}
+ 
+
+{% block content %}
+<h1> Выбранная новость </h1>
+        <p align="left"> Type: {{post.category_type}}</p>
+        <p align="left"> Title: {{post.heading|filter_mata}}</p>
+        <p align="left">Date: {{post.date_time|date:'d M Y' }}</p>
+        <p align="left"> {{post.text|filter_mata}}</p>
+{% endblock content %}

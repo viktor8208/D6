@@ -1,0 +1,65 @@
+{% extends 'flatpages/default.html' %}
+
+ {% load custom_filters %}
+
+{% block title %}
+news
+{% endblock title %}
+ 
+
+{% block content %}
+<h1> НОВОСТИ И СТАТЬИ </h1>
+
+ {% if perms.news.add_post %}
+    <a href="{% url 'news_create' %}">Добавить новость/статью</a>
+    {% endif %}
+
+
+
+{% if news%}
+    <p> </p>
+    {%for newss in news%}
+        <hr>
+         {% if perms.news.change_post %}
+     <p align="left"><a href="{% url 'news_update' pk=newss.id %}">Внести изменения</a></p>
+    {% endif %}
+        <p align="left"> Title: {{newss.heading|filter_mata}}</p>
+        <p align="left">Date: {{newss.date_time|date:'d M Y' }}</p>
+        <p align="left"> {{newss.text|truncatewords:20|filter_mata}}</p>
+         <p align="left">
+         {%for category in newss.post_category.all%}
+            <a href="{% url 'category_list' category.id%}" >{{category}} </a>
+
+         {% endfor %}</p>
+
+
+
+
+    {% endfor %}
+{% else %}
+
+<h2>На данный момент новостей нет!</h2>
+{% endif %}
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+
+   {{ page_obj.number }}
+
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+
+
+{% endblock content %}
